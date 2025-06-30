@@ -58,10 +58,6 @@ module.exports = {
     ],
     [
       '@semantic-release/github'
-      // {
-      //   "successCommentCondition": true,
-      //   "failCommentCondition": true
-      // }
     ]
   ]
 }
