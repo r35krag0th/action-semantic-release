@@ -42,12 +42,10 @@ jobs:
           VERSION: ${{ needs.semantic-version.outputs.release-version }}
         name: Check Workflow Version
         run: |
-          # shellcheck disable=SC2034
           MAJOR="${VERSION%%.*}"
-          # shellcheck disable=SC2034
           ACTION="r35krag0th/action-semantic-version"
-          # shellcheck disable=SC2034
           WF_FILE=".github/workflows/version.yml"
+          WF_VERSION="$(grep "${ACTION}" "$WF_FILE" | sed 's/.*@//')"
 
           if [[ "$WF_VERSION" != "v${MAJOR}" ]]; then
             echo "Action version in workflow does not match version to be released."
