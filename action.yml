@@ -1,0 +1,72 @@
+description: >
+  Bump semantic version automatically when changes are committed to the default branch.
+inputs:
+  create_component_tags:
+    default: "true'"
+    description: >
+      Create Git tags with version components.  For example, `v1.2.3` will create `v1`, `v1.2`, and `v1.2.3` tags and will replace any existing tags with those names.
+  dry_run:
+    default: "false"
+    description: Run semantic-release in dry run mode.
+    required: false
+name: Semantic Version
+outputs:
+  release_version:
+    description: Release Version
+    value: ${{ steps.release.outputs.version }}
+runs:
+  steps:
+    - name: Validate Inputs
+      shell: bash
+      run: |
+        if [[ -z "${{ inputs.github_token }}" ]]; then
+          echo "Misisng required input: github_token"
+          exit 1
+        fi
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: >
+          ${{
+            github.event_name == 'pull_request' && github.head_ref || github.ref_name
+          }}
+    - name: Remove Package.json files
+      shell: bash
+      run: |
+        find . -type f -name 'package.json' | xargs rm -f
+    - name: Setup NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      id: release
+      name: Release
+      shell: bash
+      run: |
+        $GITHUB_ACTION_PATH/semantic-version.sh \
+        ${{ inputs.dry_run == 'false' && ' ' || '-d' }} \
+        ${{ inputs.create_component_tags == 'true' && '-c' || '' }}
+    - name: Validate Pre-Release PRs for using Semantic Notation
+      if: github.event_name == 'pull_request'
+      env:
+        RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        PR_REGEX: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\(.*\))?(!)?:.*'
+        PR_TITLE: ${{ github.event.pull_reqiest.title }}
+      shell: bash
+      run: |
+        ERRORS=false
+        if [[ ! "$PR_TITLE" =~ $PR_REGEX ]]; then
+          echo -e "\033[1;31mPR title must follow conventional commit syntax."
+          ERRORS=true
+        fi
+        if [[ ! -z "${RELEASE_VERSION}" ]]; then
+          echo -e "\033[1;31mNo commits that follow semantic notation were found."
+          ERRORS=true
+        fi
+        if [[ $ERRORS = true ]]; then
+          echo -e "\033[1;35mBailing due to errors.\033[0m"
+          exit 1
+        fi
+  using: composite

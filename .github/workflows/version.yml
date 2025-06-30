@@ -1,0 +1,21 @@
+on:
+  workflow_call:
+    outputs:
+      release-version:
+        value: ${{ jobs.semver.outputs.release-version }}
+
+jobs:
+  semver:
+    outputs:
+      release-version: ${{ steps.semantic-release.outputs.release-version }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: semantic-release
+        uses: r35krag0th/action-semantic-release@v1
+        with:
+          dry_run: ${{ github.ref_name != 'main' }}
+          github_token: ${{ github.token }}
