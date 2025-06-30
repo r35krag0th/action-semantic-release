@@ -1,5 +1,6 @@
+---
 name: Main
-on:
+on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - main
@@ -41,8 +42,11 @@ jobs:
           VERSION: ${{ needs.semantic-version.outputs.release-version }}
         name: Check Workflow Version
         run: |
+          # shellcheck disable=SC2034
           MAJOR="${VERSION%%.*}"
+          # shellcheck disable=SC2034
           ACTION="r35krag0th/action-semantic-version"
+          # shellcheck disable=SC2034
           WF_FILE=".github/workflows/version.yml"
 
           if [[ "$WF_VERSION" != "v${MAJOR}" ]]; then
