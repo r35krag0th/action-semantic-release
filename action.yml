@@ -4,7 +4,7 @@ description: >
   to the default branch.
 inputs:
   create_component_tags:
-    default: "true'"
+    default: "true"
     description: >
       Create Git tags with version components.  For example, `v1.2.3` will
       create `v1`, `v1.2`, and `v1.2.3` tags and will replace any existing
