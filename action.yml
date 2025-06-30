@@ -60,7 +60,7 @@ runs:
       env:
         RELEASE_VERSION: ${{ steps.release.outputs.version }}
         PR_REGEX: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\(.*\))?(!)?:.*'
-        PR_TITLE: ${{ github.event.pull_reqiest.title }}
+        PR_TITLE: ${{ github.event.pull_request.title }}
       shell: bash
       run: |
         ERRORS=false
