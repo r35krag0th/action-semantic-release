@@ -57,6 +57,12 @@ module.exports = {
       }
     ],
     [
+      'semantic-release-major-tag',
+      {
+        customTags: process.env['TAG_COMPONENTS'] && ['v${major}', 'v${major}.${minor}'] || []
+      }
+    ],
+    [
       '@semantic-release/github'
     ]
   ]
