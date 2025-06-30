@@ -43,7 +43,7 @@ jobs:
         name: Check Workflow Version
         run: |
           MAJOR="${VERSION%%.*}"
-          ACTION="r35krag0th/action-semantic-version"
+          ACTION="r35krag0th/action-semantic-release"
           WF_FILE=".github/workflows/version.yml"
           WF_VERSION="$(grep "${ACTION}" "$WF_FILE" | sed 's/.*@//')"
 
