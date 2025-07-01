@@ -76,8 +76,8 @@ runs:
           echo -e "::error::\033[1;31mPR title must follow conventional commit syntax."
           ERRORS=true
         fi
-        if [[ ! -z "${RELEASE_VERSION}" ]]; then
-          echo "❌ Release Version is !-z" >> $GITHUB_STEP_SUMMARY
+        if [[ -z "${RELEASE_VERSION}" ]]; then
+          echo "❌ Release Version is empty!" >> $GITHUB_STEP_SUMMARY
           echo -e "::error::\033[1;31mNo commits that follow semantic notation were found."
           ERRORS=true
         fi
