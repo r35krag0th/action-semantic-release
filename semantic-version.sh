@@ -88,8 +88,8 @@ echo "::debug::Read version from VERSION.txt: $VERSION"
 LAST_VERSION="$(cat LAST_VERSION.txt)"
 echo "::debug::Read last version from LAST_VERSION.txt: $LAST_VERSION"
 
-echo "Vesion: ${VERSION}" >>$GITHUB_STEP_SUMMARY
-echo "Last Version: ${LAST_VERSION}" >>$GITHUB_STEP_SUMMARY
+echo "Vesion: ${VERSION}" >>"$GITHUB_STEP_SUMMARY"
+echo "Last Version: ${LAST_VERSION}" >>"$GITHUB_STEP_SUMMARY"
 
 if [[ -z "$VERSION" && "$GITHUB_REF_NAME" == "main" ]]; then
   echo "::debug::VERSION is empty and GITHUB_REF_NAME is main, using LAST_VERSION"
