@@ -1,5 +1,5 @@
 ---
-on:  # yamllint disable-line rule:truthy
+on: # yamllint disable-line rule:truthy
   workflow_call:
     outputs:
       release-version:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: semantic-release
-        uses: r35krag0th/action-semantic-release@v1
+        uses: r35krag0th/action-semantic-release@8669f03095ac76620df17eca6a43a4cba438ff73 # ratchet:r35krag0th/action-semantic-release@v1
         with:
           dry_run: ${{ github.ref_name != 'main' }}
           github_token: ${{ github.token }}
